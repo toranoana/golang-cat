@@ -29,11 +29,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	filename := flag.Arg(0)
-	fmt.Println(filename)
-	fmt.Println(*theme)
-	fmt.Println(*language)
-	bytes, err := ioutil.ReadFile(filename)
+	bytes, err := ioutil.ReadFile(flag.Arg(0))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
