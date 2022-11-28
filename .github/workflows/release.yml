@@ -1,0 +1,36 @@
+name: Make New Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.x
+
+      - name: Cross Build & Archiving
+        run: make x-build
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          generate_release_notes: true
+
+      - name: Upload Binary
+        run: make upload-binary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

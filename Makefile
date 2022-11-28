@@ -1,5 +1,7 @@
 BIN_NAME := golang-cat
 BIN_DIR := ./bin
+X_BIN_DIR := $(BIN_DIR)/goxz
+VERSION := $$(make -s app-version)
 
 GOBIN ?= $(shell go env GOPATH)/bin
 
@@ -11,16 +13,23 @@ build:
 	mkdir -p $(BIN_DIR)
 	go build -o $(BIN_DIR)/$(BIN_NAME) main.go
 
+.PHONY: x-build
+x-build: $(GOBIN)/goxz
+	goxz -d $(X_BIN_DIR) -n $(BIN_NAME) .
 
-.PHONY: build
-x-build:
-	@echo 'クロスコンパイルをgoxzでやる'
+.PHONY: upload-binary
+upload-binary: $(GOBIN)/ghr
+	ghr "v$(VERSION)" $(X_BIN_DIR)
 
-git-release:
-	@echo 'ghrを使ってreleaseを作る'
+.PHONY: app-version
+app-version: $(GOBIN)/gobump
+	@gobump show -r .
 
 $(GOBIN)/goxz:
-	@echo 'goxzのインストール'
+	@go install github.com/Songmu/goxz/cmd/goxz@latest
 
 $(GOBIN)/ghr:
-	@echo 'ghrのインストール'
+	@go install github.com/tcnksm/ghr@latest
+
+$(GOBIN)/gobump:
+	@go install github.com/x-motemen/gobump/cmd/gobump@master

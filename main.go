@@ -12,6 +12,8 @@ import (
 	"github.com/alecthomas/chroma/styles"
 )
 
+const version = "0.0.1"
+
 var (
 	theme    = flag.String("theme", "monokai", "highlights theme name")
 	language = flag.String("language", "", "file language")
