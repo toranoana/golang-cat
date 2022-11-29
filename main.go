@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 
 	"github.com/alecthomas/chroma"
@@ -15,9 +16,46 @@ import (
 const version = "0.0.1"
 
 var (
+	number_f = flag.Bool("number", false, "line number")
 	theme    = flag.String("theme", "monokai", "highlights theme name")
 	language = flag.String("language", "", "file language")
 )
+
+type withNumberWriter struct {
+	writer     io.Writer
+	lineNumber uint32
+	buffer     *bytes.Buffer
+}
+
+func (wnw *withNumberWriter) Write(b []byte) (n int, err error) {
+	if !bytes.Contains(b, []byte{'\n'}) {
+		wnw.buffer.Write(b)
+		return len(b), nil
+	}
+
+	format := "%6d|\t"
+	ln := []byte(fmt.Sprintf(format, wnw.lineNumber))
+
+	var p []byte
+	if wnw.buffer.Len() > 0 {
+		p = wnw.buffer.Bytes()
+		wnw.buffer.Reset()
+	}
+
+	p = append(p, b...)
+
+	_, err = wnw.writer.Write(append(ln, p...))
+	if err != nil {
+		return len(b), err
+	}
+	wnw.lineNumber++
+
+	return len(b), nil
+}
+
+func newWithNumber(f io.Writer) *withNumberWriter {
+	return &withNumberWriter{f, 1, new(bytes.Buffer)}
+}
 
 func main() {
 	flag.Usage = func() {
@@ -31,7 +69,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	bytes, err := ioutil.ReadFile(flag.Arg(0))
+	bytes, err := os.ReadFile(flag.Arg(0))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -44,6 +82,12 @@ func main() {
 }
 
 func printText(text *[]byte) (err error) {
+	var w io.Writer
+	w = os.Stdout
+	if *number_f {
+		w = newWithNumber(w)
+	}
+
 	var lexer chroma.Lexer
 	if *language != "" {
 		lexer = lexers.Get(*language)
@@ -69,5 +113,5 @@ func printText(text *[]byte) (err error) {
 		return err
 	}
 
-	return formatter.Format(os.Stdout, style, iterator)
+	return formatter.Format(w, style, iterator)
 }
