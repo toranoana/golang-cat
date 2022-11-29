@@ -16,7 +16,7 @@ import (
 const version = "0.0.1"
 
 var (
-	number_f = flag.Bool("number", false, "line number")
+	number_f = flag.Bool("number", false, "line number flag")
 	theme    = flag.String("theme", "monokai", "highlights theme name")
 	language = flag.String("language", "", "file language")
 )
@@ -53,8 +53,8 @@ func (wnw *withNumberWriter) Write(b []byte) (n int, err error) {
 	return len(b), nil
 }
 
-func newWithNumber(f io.Writer) *withNumberWriter {
-	return &withNumberWriter{f, 1, new(bytes.Buffer)}
+func newWithNumber(w io.Writer) *withNumberWriter {
+	return &withNumberWriter{w, 1, new(bytes.Buffer)}
 }
 
 func main() {
