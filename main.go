@@ -13,7 +13,7 @@ import (
 	"github.com/alecthomas/chroma/styles"
 )
 
-const version = "0.0.1"
+const version = "0.0.2"
 
 var (
 	number_f = flag.Bool("number", false, "line number flag")
