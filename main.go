@@ -40,7 +40,8 @@ func (wnw *withNumberWriter) Write(b []byte) (n int, err error) {
 	}
 	p = append(p, b...)
 
-	if _, err = wnw.writer.Write(append([]byte(fmt.Sprintf("%4d| ", wnw.lineNumber)), p...)); err != nil {
+	ln := []byte(fmt.Sprintf("%4d| ", wnw.lineNumber))
+	if _, err = wnw.writer.Write(append(ln, p...)); err != nil {
 		return len(b), err
 	}
 	wnw.lineNumber++
