@@ -33,19 +33,14 @@ func (wnw *withNumberWriter) Write(b []byte) (n int, err error) {
 		return len(b), nil
 	}
 
-	format := "%6d|\t"
-	ln := []byte(fmt.Sprintf(format, wnw.lineNumber))
-
 	var p []byte
 	if wnw.buffer.Len() > 0 {
 		p = wnw.buffer.Bytes()
 		wnw.buffer.Reset()
 	}
-
 	p = append(p, b...)
 
-	_, err = wnw.writer.Write(append(ln, p...))
-	if err != nil {
+	if _, err = wnw.writer.Write(append([]byte(fmt.Sprintf("%4d| ", wnw.lineNumber)), p...)); err != nil {
 		return len(b), err
 	}
 	wnw.lineNumber++
