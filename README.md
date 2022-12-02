@@ -14,7 +14,12 @@ GO言語で作成したハイライトできるcatコマンド
 ### デプロイ
 
 ```sh
+make app-version
 gobump (major|minor|patch) -w -v -r .
+
+git add .
+git commit -m "Update: v$(make app-version)"
+
 git tag v$(make app-version)
 git push origin v$(make app-version)
 ```
