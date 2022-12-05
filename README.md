@@ -1,7 +1,10 @@
 # golang-cat
 
-GO言語で作成したハイライトできるcatコマンド
+GitHub ActionsでReleaseを自動生成するためのテストプロジェクト
 
+### 実装内容
+
+catみたいなことができる`golang-cat`コマンド
 
 ### 導入
 
