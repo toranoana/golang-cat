@@ -1,4 +1,4 @@
-module github.com/yuki-kano-lab/golang-cat
+module github.com/toranoana/golang-cat
 
 go 1.19
 

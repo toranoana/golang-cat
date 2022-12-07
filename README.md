@@ -8,7 +8,7 @@ catみたいなことができる`golang-cat`コマンド
 
 ### 導入
 
-`go install github.com/yuki-kano-lab/golang-cat` またはreleaseからバイナリの取得
+`go install github.com/toranoana/golang-cat` またはreleaseからバイナリの取得
 
 ### 実行方法
 
