@@ -2,6 +2,9 @@
 
 GitHub ActionsでReleaseを自動生成するためのテストプロジェクト
 
+アドベントカレンダー2022冬9日目の記事用に作成されました。
+記事は[こちら](https://toranoana-lab.hatenablog.com/entry/2022/12/09/000000)
+
 ### 実装内容
 
 catみたいなことができる`golang-cat`コマンド
